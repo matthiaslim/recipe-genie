@@ -1,0 +1,108 @@
+import Stars from "@/components/RatingStars";
+import React from "react";
+import { View, StyleSheet, Image } from "react-native";
+import { Appbar, Button, Card, Icon, TouchableRipple, Text, IconButton } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: "#C8102F",
+    paddingVertical: 24,
+    paddingHorizontal: 15
+  },
+  container: {
+    marginHorizontal: 15,
+    marginTop: 31,
+  },
+  inspoContainer: {
+    width: '100%',
+    borderWidth: 2,
+    borderColor: '#EF95A4',
+    borderRadius: 10,
+    borderStyle: 'dashed',
+    padding: 70,
+    marginBottom: 31
+  },
+  inspoContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#EF95A4",
+  },
+  inspoTextColor: {
+    color: "#EF95A4"
+  },
+  bold: {
+    fontFamily: 'Montserrat-Bold'
+  },
+  recentViewed: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginTop: 16
+  },
+  recipeCard: {
+    flexBasis: '48%',
+    marginBottom: 16
+  },
+  recipeImg: {
+    width: '100%',
+    height: 125,
+    borderRadius: 10,
+  }
+})
+
+export default function Index() {
+  return (
+    <View>
+      <SafeAreaView style={styles.header}>
+        <Text variant="headlineSmall" style={{ color: "#FFFFFF" }}>Welcome,</Text>
+        <Text variant="headlineLarge" style={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold' }}>User</Text>
+      </SafeAreaView>
+      <View style={styles.container}>
+        <TouchableRipple
+          style={styles.inspoContainer}
+          onPress={() => console.log('Pressed')}
+        >
+          <View style={styles.inspoContent}>
+            <Icon size={24} source="magnify" color="#EF95A4" />
+            <Text style={styles.inspoTextColor}>Find Recipe Inspirations</Text>
+          </View>
+        </TouchableRipple>
+        <Text variant="titleLarge" style={styles.bold}>Recently viewed recipes</Text>
+        <View style={styles.recentViewed}>
+          <TouchableRipple
+            style={styles.recipeCard}
+            onPress={() => console.log('Recipe 1')}
+          >
+            <View>
+              <Image style={styles.recipeImg} source={require("../../assets/images/ratatouille.jpg")} />
+              <Text variant="titleSmall">Ratatouille</Text>
+              <Stars count={5} />
+            </View>
+          </TouchableRipple>
+          <TouchableRipple
+            style={styles.recipeCard}
+            onPress={() => console.log('Recipe 2')}
+          >
+            <View>
+              <Image style={styles.recipeImg} source={require("../../assets/images/foccacia.jpg")} />
+              <Text variant="titleSmall">Foccacia</Text>
+              <Stars count={3} />
+            </View>
+          </TouchableRipple>
+          <TouchableRipple
+            style={styles.recipeCard}
+            onPress={() => console.log('Recipe 3')}
+          >
+            <View>
+              <Image style={styles.recipeImg} source={require("../../assets/images/carbonara.webp")} />
+              <Text variant="titleSmall">Carbonara</Text>
+              <Stars count={2} />
+            </View>
+          </TouchableRipple>
+        </View>
+      </View>
+    </View>
+  );
+}
