@@ -1,6 +1,6 @@
 import Stars from "@/components/RatingStars";
 import React from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, ScrollView } from "react-native";
 import { Appbar, Button, Card, Icon, TouchableRipple, Text, IconButton } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -8,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "#C8102F",
-    paddingVertical: 24,
+    paddingTop: 5,
     paddingHorizontal: 15
   },
   container: {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 
 export default function Index() {
   return (
-    <View>
+    <ScrollView>
       <SafeAreaView style={styles.header}>
         <Text variant="headlineSmall" style={{ color: "#FFFFFF" }}>Welcome,</Text>
         <Text variant="headlineLarge" style={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold' }}>User</Text>
@@ -103,6 +103,6 @@ export default function Index() {
           </TouchableRipple>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
