@@ -19,6 +19,19 @@ export default function TabLayout() {
 
                 }}
             />
+            <Tabs.Screen
+                name="recipes"
+                options={{
+                    title: "Recipes",
+                    headerStyle: {
+                        backgroundColor: '#C8102F',
+                        paddingVertical: 24,
+                    },
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => <Icon size={28} source="chef-hat" color={color} />
+
+                }}
+            />
         </Tabs>
     )
 }

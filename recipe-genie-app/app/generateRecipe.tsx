@@ -1,7 +1,8 @@
 import { router } from "expo-router";
+import React from "react";
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { Button, Chip, TextInput, Text, IconButton, useTheme } from "react-native-paper";
+import { Button, Chip, TextInput, Text, IconButton, useTheme, Searchbar } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function newRecipe() {
@@ -10,6 +11,9 @@ export default function newRecipe() {
 
     const ingredients = ["Celery", "Kale", "Tomato"];
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+
+    const [searchQuery, setSearchQuery] = React.useState('');
+
 
     const toggleSelection = (ingredient: string) => {
         setSelectedIngredients(prevState =>
@@ -29,10 +33,10 @@ export default function newRecipe() {
                         <Text variant="titleMedium">based on ingredients that you have</Text>
                     </View>
                 </View>
-                <TextInput
-                    mode="outlined"
-                    // label="Search Ingredient"
-                    placeholder="Search..."
+                <Searchbar
+                    placeholder="Search"
+                    onChangeText={setSearchQuery}
+                    value={searchQuery}
                 />
                 <Button style={styles.buttonMargin} icon="camera" mode="contained">Get ingredients using camera</Button>
                 <View style={styles.chipContainer}>
