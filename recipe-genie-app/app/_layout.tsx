@@ -20,15 +20,30 @@ export default function RootLayout() {
 
   const fonts = configureFonts({ config: baseFont });
 
-  const theme = useTheme();
+  const theme = {
+    ...MD3LightTheme,
+    colors: {
+      ...MD3LightTheme.colors,
+      primary: '#C8102F',
+      secondary: '#EF95A4'
+    },
+    fonts,
+  };
 
   return (
     <ConvexProvider client={convex}>
-      <PaperProvider theme={{ ...theme, fonts }}>
+      <PaperProvider theme={theme}>
         <Stack>
           <Stack.Screen
             name="(tabs)"
             options={{
+              headerShown: false
+            }}
+          />
+          <Stack.Screen
+            name="generateRecipe"
+            options={{
+              title: "New Recipe",
               headerShown: false
             }}
           />

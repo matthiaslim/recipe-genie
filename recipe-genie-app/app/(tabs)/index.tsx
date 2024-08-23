@@ -1,58 +1,14 @@
 import Stars from "@/components/RatingStars";
+import { Link } from "expo-router";
 import React from "react";
-import { View, StyleSheet, Image, ScrollView } from "react-native";
-import { Appbar, Button, Card, Icon, TouchableRipple, Text, IconButton } from "react-native-paper";
+import { View, StyleSheet, Image, ScrollView, Platform } from "react-native";
+import { Appbar, Button, Card, Icon, TouchableRipple, Text, IconButton, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: "#C8102F",
-    paddingTop: 5,
-    paddingHorizontal: 15
-  },
-  container: {
-    marginHorizontal: 15,
-    marginTop: 31,
-  },
-  inspoContainer: {
-    width: '100%',
-    borderWidth: 2,
-    borderColor: '#EF95A4',
-    borderRadius: 10,
-    borderStyle: 'dashed',
-    padding: 70,
-    marginBottom: 31
-  },
-  inspoContent: {
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#EF95A4",
-  },
-  inspoTextColor: {
-    color: "#EF95A4"
-  },
-  bold: {
-    fontFamily: 'Montserrat-Bold'
-  },
-  recentViewed: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginTop: 16
-  },
-  recipeCard: {
-    flexBasis: '48%',
-    marginBottom: 16
-  },
-  recipeImg: {
-    width: '100%',
-    height: 125,
-    borderRadius: 10,
-  }
-})
-
 export default function Index() {
+  const { colors } = useTheme();
+  const styles = useStyles(colors);
+
   return (
     <ScrollView>
       <SafeAreaView style={styles.header}>
@@ -60,15 +16,17 @@ export default function Index() {
         <Text variant="headlineLarge" style={{ color: "#FFFFFF", fontFamily: 'Montserrat-Bold' }}>User</Text>
       </SafeAreaView>
       <View style={styles.container}>
-        <TouchableRipple
-          style={styles.inspoContainer}
-          onPress={() => console.log('Pressed')}
-        >
-          <View style={styles.inspoContent}>
-            <Icon size={24} source="magnify" color="#EF95A4" />
-            <Text style={styles.inspoTextColor}>Find Recipe Inspirations</Text>
-          </View>
-        </TouchableRipple>
+        <Link href="/generateRecipe" asChild>
+          <TouchableRipple
+            style={styles.inspoContainer}
+            onPress={() => console.log('Pressed')}
+          >
+            <View style={styles.inspoContent}>
+              <Icon size={24} source="magnify" color="#EF95A4" />
+              <Text style={styles.inspoTextColor}>Find Recipe Inspirations</Text>
+            </View>
+          </TouchableRipple>
+        </Link>
         <Text variant="titleLarge" style={styles.bold}>Recently viewed recipes</Text>
         <View style={styles.recentViewed}>
           <TouchableRipple
@@ -106,3 +64,52 @@ export default function Index() {
     </ScrollView>
   );
 }
+
+const useStyles = (colors: any) => StyleSheet.create({
+  header: {
+    backgroundColor: colors.primary,
+    paddingTop: Platform.OS === 'ios' ? 5 : 20,
+    paddingHorizontal: 15,
+    paddingVertical: Platform.OS === 'ios' ? 5 : 40
+
+  },
+  container: {
+    marginHorizontal: 15,
+    marginTop: 31,
+  },
+  inspoContainer: {
+    width: '100%',
+    borderWidth: 2,
+    borderColor: colors.secondary,
+    borderRadius: 10,
+    borderStyle: 'dashed',
+    padding: 70,
+    marginBottom: 31
+  },
+  inspoContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    color: colors.secondary,
+  },
+  inspoTextColor: {
+    color: colors.secondary
+  },
+  bold: {
+    fontFamily: 'Montserrat-Bold'
+  },
+  recentViewed: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginTop: 16
+  },
+  recipeCard: {
+    flexBasis: '48%',
+    marginBottom: 16
+  },
+  recipeImg: {
+    width: '100%',
+    height: 125,
+    borderRadius: 10,
+  }
+})
