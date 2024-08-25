@@ -61,6 +61,9 @@ export default function Index() {
           </TouchableRipple>
         </View>
       </View>
+      <Link href="/login" asChild>
+        <Button>Login Page</Button>
+      </Link>
     </ScrollView>
   );
 }
