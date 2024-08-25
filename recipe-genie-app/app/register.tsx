@@ -8,14 +8,22 @@ export default function Login() {
     const { colors } = useTheme();
     const styles = useStyles(colors);
 
+    const [username, setUsername] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const [password2, setPassword2] = React.useState("");
 
     return (
         <SafeAreaView style={styles.container}>
+            {/* <Text variant="headlineLarge" style={styles.bold}>Recipe Genie</Text> */}
             <View style={styles.form}>
-                <Text variant="headlineLarge" style={styles.bold}>Recipe Genie</Text>
-                <Text variant="headlineMedium" style={[styles.bold, styles.formHeader]}>Login</Text>
+                <Text variant="headlineMedium" style={[styles.bold, styles.formHeader]}>Register</Text>
+                <TextInput
+                    mode="outlined"
+                    label="Username"
+                    onChangeText={value => setUsername(value)}
+                    style={styles.input}
+                />
                 <TextInput
                     mode="outlined"
                     label="Email"
@@ -29,9 +37,16 @@ export default function Login() {
                     secureTextEntry={true}
                     style={styles.input}
                 />
-                <Button mode="contained" onPress={() => console.log("login function")} style={styles.loginButton}>Login</Button>
+                <TextInput
+                    mode="outlined"
+                    label="Confirm Password"
+                    onChangeText={value => setPassword2(value)}
+                    secureTextEntry={true}
+                    style={styles.input}
+                />
+                <Button mode="contained" onPress={() => console.log("login function")} style={styles.loginButton}>Register</Button>
             </View>
-            <Button mode="text" onPress={() => router.replace('/register')} style={styles.loginButton} labelStyle={{ fontFamily: 'Montserrat-Bold' }}>Create an account</Button>
+            <Button mode="text" onPress={() => router.replace('/login')} style={styles.loginButton} labelStyle={{ fontFamily: 'Montserrat-Bold' }}>Already registered? Login</Button>
         </SafeAreaView>
     )
 }
@@ -61,9 +76,6 @@ const useStyles = (colors: any) => StyleSheet.create({
     },
     loginButton: {
         marginTop: 20,
-        // paddingVertical: 5,
-        // borderRadius: 5,
-        // backgroundColor: colors.primary,
         width: '100%'
     }
 })
