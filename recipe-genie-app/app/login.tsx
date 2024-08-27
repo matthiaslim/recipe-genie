@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -12,27 +12,29 @@ export default function Login() {
     const [password, setPassword] = React.useState("");
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.form}>
-                <Text variant="headlineLarge" style={styles.bold}>Recipe Genie</Text>
-                <Text variant="headlineMedium" style={[styles.bold, styles.formHeader]}>Login</Text>
-                <TextInput
-                    mode="outlined"
-                    label="Email"
-                    onChangeText={value => setEmail(value)}
-                    style={styles.input}
-                />
-                <TextInput
-                    mode="outlined"
-                    label="Password"
-                    onChangeText={value => setPassword(value)}
-                    secureTextEntry={true}
-                    style={styles.input}
-                />
-                <Button mode="contained" onPress={() => console.log("login function")} style={styles.loginButton}>Login</Button>
-            </View>
-            <Button mode="text" onPress={() => router.replace('/register')} style={styles.loginButton} labelStyle={{ fontFamily: 'Montserrat-Bold' }}>Create an account</Button>
-        </SafeAreaView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.form}>
+                    <Text variant="headlineLarge" style={styles.bold}>Recipe Genie</Text>
+                    <Text variant="headlineMedium" style={[styles.bold, styles.formHeader]}>Login</Text>
+                    <TextInput
+                        mode="outlined"
+                        label="Email"
+                        onChangeText={value => setEmail(value)}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        mode="outlined"
+                        label="Password"
+                        onChangeText={value => setPassword(value)}
+                        secureTextEntry={true}
+                        style={styles.input}
+                    />
+                    <Button mode="contained" onPress={() => router.replace('/(tabs)/')} style={styles.loginButton}>Login</Button>
+                </View>
+                <Button mode="text" onPress={() => router.replace('/register')} style={styles.loginButton} labelStyle={{ fontFamily: 'Montserrat-Bold' }}>Create an account</Button>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
     )
 }
 

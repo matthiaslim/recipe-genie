@@ -59,6 +59,12 @@ export default function RootLayout() {
               headerShown: false
             }}
           />
+          <Stack.Screen
+            name="createRecipe"
+            options={{
+              headerShown: false
+            }}
+          />
         </Stack>
       </PaperProvider>
     </ConvexProvider>

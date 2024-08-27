@@ -1,8 +1,9 @@
 import { StyleSheet, View, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Searchbar, SegmentedButtons, Text, TextInput, TouchableRipple, useTheme } from 'react-native-paper'
+import { Button, IconButton, Searchbar, SegmentedButtons, Text, TextInput, TouchableRipple, useTheme } from 'react-native-paper'
 import React from "react";
 import Stars from "@/components/RatingStars";
+import { router } from "expo-router";
 
 export default function Recipes() {
     const { colors } = useTheme();
@@ -14,11 +15,17 @@ export default function Recipes() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text variant="headlineMedium" style={styles.bold}>Recipes</Text>
+                <View style={styles.heading}>
+                    <Text variant="headlineMedium" style={styles.bold}>Recipes</Text>
+                    <Button icon="plus" mode="outlined" onPress={() => router.push('/createRecipe')}>
+                        New Recipe
+                    </Button>
+                </View>
                 <Searchbar
                     placeholder="Search"
                     onChangeText={setSearchQuery}
                     value={searchQuery}
+                    style={styles.search}
                 />
                 <SegmentedButtons
                     value={value}
@@ -86,12 +93,20 @@ export default function Recipes() {
 
 const useStyles = (colors: any) => StyleSheet.create({
     container: {
-        // paddingHorizontal: 15,
         marginTop: 31,
     },
     header: {
         paddingHorizontal: 15,
         marginBottom: 20,
+    },
+    heading: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    search: {
+        marginTop: 20,
     },
     bold: {
         fontFamily: 'Montserrat-Bold'
