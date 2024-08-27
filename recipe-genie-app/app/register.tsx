@@ -3,79 +3,164 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSignUp } from "@clerk/clerk-expo";
 
 export default function Login() {
-    const { colors } = useTheme();
-    const styles = useStyles(colors);
+  const { colors } = useTheme();
+  const styles = useStyles(colors);
+  const { isLoaded, signUp, setActive } = useSignUp();
 
-    const [username, setUsername] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [password2, setPassword2] = React.useState("");
+  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [password2, setPassword2] = React.useState("");
+  const [error, setError] = React.useState("");
+  const [pendingVerification, setPendingVerification] = React.useState(false);
+  const [code, setCode] = React.useState('')
 
-    return (
-        <SafeAreaView style={styles.container}>
-            {/* <Text variant="headlineLarge" style={styles.bold}>Recipe Genie</Text> */}
-            <View style={styles.form}>
-                <Text variant="headlineMedium" style={[styles.bold, styles.formHeader]}>Register</Text>
-                <TextInput
-                    mode="outlined"
-                    label="Username"
-                    onChangeText={value => setUsername(value)}
-                    style={styles.input}
-                />
-                <TextInput
-                    mode="outlined"
-                    label="Email"
-                    onChangeText={value => setEmail(value)}
-                    style={styles.input}
-                />
-                <TextInput
-                    mode="outlined"
-                    label="Password"
-                    onChangeText={value => setPassword(value)}
-                    secureTextEntry={true}
-                    style={styles.input}
-                />
-                <TextInput
-                    mode="outlined"
-                    label="Confirm Password"
-                    onChangeText={value => setPassword2(value)}
-                    secureTextEntry={true}
-                    style={styles.input}
-                />
-                <Button mode="contained" onPress={() => console.log("login function")} style={styles.loginButton}>Register</Button>
-            </View>
-            <Button mode="text" onPress={() => router.replace('/login')} style={styles.loginButton} labelStyle={{ fontFamily: 'Montserrat-Bold' }}>Already registered? Login</Button>
-        </SafeAreaView>
-    )
+  const onSignUpPress = async () => {
+    if (!isLoaded) {
+      return;
+    }
+
+    if (password !== password2) {
+      setError("Passwords do not match");
+      return;
+    }
+    try {
+        await signUp.create({
+          emailAddress:email,
+          password
+        })
+  
+        await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
+  
+        setPendingVerification(true)
+      } catch (err: any) {
+        // See https://clerk.com/docs/custom-flows/error-handling
+        // for more info on error handling
+        console.error(JSON.stringify(err, null, 2))
+      }
+  };
+
+  const onPressVerify = async () => {
+    if (!isLoaded) {
+      return
+    }
+
+    try {
+      const completeSignUp = await signUp.attemptEmailAddressVerification({
+        code,
+      })
+
+      if (completeSignUp.status === 'complete') {
+        await setActive({ session: completeSignUp.createdSessionId })
+        router.replace('/')
+      } else {
+        console.error(JSON.stringify(completeSignUp, null, 2))
+      }
+    } catch (err: any) {
+      // See https://clerk.com/docs/custom-flows/error-handling
+      // for more info on error handling
+      console.error(JSON.stringify(err, null, 2))
+    }
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* <Text variant="headlineLarge" style={styles.bold}>Recipe Genie</Text> */}
+      <View style={styles.form}>
+        <Text variant="headlineMedium" style={[styles.bold, styles.formHeader]}>
+          Register
+        </Text>
+        <TextInput
+          mode="outlined"
+          label="Username"
+          onChangeText={(username) => setUsername(username)}
+          style={styles.input}
+        />
+        <TextInput
+          mode="outlined"
+          label="Email"
+          onChangeText={(email) => setEmail(email)}
+          style={styles.input}
+        />
+        <TextInput
+          mode="outlined"
+          label="Password"
+          onChangeText={(password) => setPassword(password)}
+          secureTextEntry={true}
+          style={styles.input}
+        />
+        <TextInput
+          mode="outlined"
+          label="Confirm Password"
+          onChangeText={(value) => setPassword2(value)}
+          secureTextEntry={true}
+          style={styles.input}
+        />
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        <Button
+          mode="contained"
+          onPress={onSignUpPress}
+          style={styles.loginButton}
+        >
+          Register
+        </Button>
+        {pendingVerification && (
+          <>
+            <TextInput
+              value={code}
+              placeholder="Code..."
+              onChangeText={(code) => setCode(code)}
+            />
+            <Button title="Verify Email" onPress={onPressVerify} />
+          </>
+        )}
+      </View>
+      <Button
+        mode="text"
+        onPress={() => router.replace("/login")}
+        style={styles.loginButton}
+        labelStyle={{ fontFamily: "Montserrat-Bold" }}
+      >
+        Already registered? Login
+      </Button>
+    </SafeAreaView>
+  );
 }
 
-const useStyles = (colors: any) => StyleSheet.create({
+const useStyles = (colors: any) =>
+  StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginHorizontal: 15,
-        paddingVertical: 30,
+      flex: 1,
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginHorizontal: 15,
+      paddingVertical: 30,
     },
     form: {
-        marginTop: 75,
-        alignSelf: 'stretch',
-        alignItems: 'center',
+      marginTop: 75,
+      alignSelf: "stretch",
+      alignItems: "center",
     },
     formHeader: {
-        marginVertical: 50,
+      marginVertical: 50,
     },
     bold: {
-        fontFamily: 'Montserrat-Bold'
+      fontFamily: "Montserrat-Bold",
     },
     input: {
-        marginVertical: 10,
-        width: '100%', // Ensure the input fields take full width
+      marginVertical: 10,
+      width: "100%", // Ensure the input fields take full width
     },
     loginButton: {
-        marginTop: 20,
-        width: '100%'
-    }
-})
+      marginTop: 20,
+      width: "100%",
+    },
+    errorText: {
+      color: "red",
+      marginTop: 20,
+      textAlign: "center",
+    },
+  });
