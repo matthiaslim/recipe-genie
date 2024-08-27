@@ -11,7 +11,7 @@ export default function Login() {
     const { isLoaded, signUp, setActive } = useSignUp();
 
     const [username, setUsername] = React.useState("");
-    const [email, setEmail] = React.useState("");
+    const [emailAddress, setEmailAddress] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [password2, setPassword2] = React.useState("");
     const [error, setError] = React.useState("");
@@ -29,7 +29,8 @@ export default function Login() {
         }
         try {
             await signUp.create({
-                emailAddress: email,
+                username,
+                emailAddress,
                 password
             })
 
@@ -77,18 +78,21 @@ export default function Login() {
                         <TextInput
                             mode="outlined"
                             label="Username"
+                            value={username}
                             onChangeText={(username) => setUsername(username)}
                             style={styles.input}
                         />
                         <TextInput
                             mode="outlined"
                             label="Email"
-                            onChangeText={(email) => setEmail(email)}
+                            value={emailAddress}
+                            onChangeText={(email) => setEmailAddress(email)}
                             style={styles.input}
                         />
                         <TextInput
                             mode="outlined"
                             label="Password"
+                            value={password}
                             onChangeText={(password) => setPassword(password)}
                             secureTextEntry={true}
                             style={styles.input}
