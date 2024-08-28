@@ -61,7 +61,7 @@ export default function Login() {
                 />
                 <Button mode="contained" onPress={onSignInPress} style={styles.loginButton}>Login</Button>
             </View>
-            <Button mode="text" onPress={() => router.replace('/(auth)/register')} style={styles.loginButton} labelStyle={{ fontFamily: 'Montserrat-Bold' }}>Create an account</Button>
+            <Button mode="text" onPress={() => router.replace('/register')} style={styles.loginButton} labelStyle={{ fontFamily: 'Montserrat-Bold' }}>Create an account</Button>
         </SafeAreaView>
     )
 }

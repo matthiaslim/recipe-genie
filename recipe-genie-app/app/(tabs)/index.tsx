@@ -30,7 +30,7 @@ export default function Index() {
 
   const onSignOut = async () => {
     await signOut();
-    router.replace("/(auth)/login");
+    router.replace("/login");
   };
 
   return (
