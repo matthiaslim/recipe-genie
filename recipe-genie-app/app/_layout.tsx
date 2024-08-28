@@ -1,5 +1,5 @@
 import { ConvexReactClient } from "convex/react";
-import { Stack } from "expo-router";
+import { router, Slot, Stack } from "expo-router";
 import { View } from "react-native";
 import {
   configureFonts,
@@ -12,6 +12,7 @@ import { useFonts } from "expo-font";
 import { ClerkProvider, ClerkLoaded, useAuth } from "@clerk/clerk-expo";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import * as SecureStore from "expo-secure-store";
+import { useEffect } from "react";
 
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
   unsavedChangesWarning: false,
@@ -50,7 +51,10 @@ if (!publishableKey) {
   );
 }
 
+
 export default function RootLayout() {
+
+
   const [fontsLoaded] = useFonts({
     "Montserrat-Bold": require("../assets/fonts/Montserrat-Bold.ttf"),
     "Montserrat-Regular": require("../assets/fonts/Montserrat-Regular.ttf"),
@@ -85,7 +89,8 @@ export default function RootLayout() {
       <ClerkLoaded>
         <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
           <PaperProvider theme={theme}>
-            <Stack initialRouteName={"/(auth)/login"}>
+            <Slot />
+            {/* <Stack initialRouteName={"/(auth)/login"}>
               <Stack.Screen
                 name="(auth)"
                 options={{
@@ -105,7 +110,7 @@ export default function RootLayout() {
                   headerShown: false,
                 }}
               />
-            </Stack>
+            </Stack> */}
           </PaperProvider>
         </ConvexProviderWithClerk>
       </ClerkLoaded>
