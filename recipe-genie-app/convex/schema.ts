@@ -4,10 +4,9 @@ import { v } from "convex/values";
 export default defineSchema({
   user: defineTable({
     username: v.string(),
-    password: v.string(),
     email: v.string(),
-
-  }),
+    tokenIdentifier: v.optional(v.string()),
+  }).index("by_token",["tokenIdentifier"]),
   recipe: defineTable({
     recipeName: v.string(),
     description: v.string(),

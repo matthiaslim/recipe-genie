@@ -1,40 +1,68 @@
-import { router } from "expo-router";
+import { useSignIn } from "@clerk/clerk-expo";
+import { isLoaded } from "expo-font";
+import { Link, useRouter } from "expo-router";
 import React from "react";
 import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+
 export default function Login() {
     const { colors } = useTheme();
     const styles = useStyles(colors);
 
-    const [email, setEmail] = React.useState("");
+    const {signIn, setActive, isLoaded} = useSignIn()
+    const router = useRouter()
+
+    const [emailAddress, setEmailAddress] = React.useState("");
     const [password, setPassword] = React.useState("");
 
+    const onSignInPress = React.useCallback(async ()=>{
+        if (!isLoaded){
+            return
+        }
+
+        try{
+            const signInAttempt = await signIn.create({
+                identifier:emailAddress,
+                password
+            })
+
+            if(signInAttempt.status === 'complete'){
+                await setActive({session: signInAttempt.createdSessionId})
+                router.replace('/')
+            } else {
+                console.error(JSON.stringify(signInAttempt,null,2))
+            }
+        } catch (err:any){
+            console.error(JSON.stringify(err,null,2))
+        }
+    },[isLoaded,emailAddress,password])
+
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <SafeAreaView style={styles.container}>
-                <View style={styles.form}>
-                    <Text variant="headlineLarge" style={styles.bold}>Recipe Genie</Text>
-                    <Text variant="headlineMedium" style={[styles.bold, styles.formHeader]}>Login</Text>
-                    <TextInput
-                        mode="outlined"
-                        label="Email"
-                        onChangeText={value => setEmail(value)}
-                        style={styles.input}
-                    />
-                    <TextInput
-                        mode="outlined"
-                        label="Password"
-                        onChangeText={value => setPassword(value)}
-                        secureTextEntry={true}
-                        style={styles.input}
-                    />
-                    <Button mode="contained" onPress={() => router.replace('/(tabs)/')} style={styles.loginButton}>Login</Button>
-                </View>
-                <Button mode="text" onPress={() => router.replace('/register')} style={styles.loginButton} labelStyle={{ fontFamily: 'Montserrat-Bold' }}>Create an account</Button>
-            </SafeAreaView>
-        </TouchableWithoutFeedback>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.form}>
+                <Text variant="headlineLarge" style={styles.bold}>Recipe Genie</Text>
+                <Text variant="headlineMedium" style={[styles.bold, styles.formHeader]}>Login</Text>
+                <TextInput
+                    mode="outlined"
+                    label="Email"
+                    value={emailAddress}
+                    onChangeText={emailAddress => setEmailAddress(emailAddress)}
+                    style={styles.input}
+                />
+                <TextInput
+                    mode="outlined"
+                    label="Password"
+                    value={password}
+                    onChangeText={password => setPassword(password)}
+                    secureTextEntry={true}
+                    style={styles.input}
+                />
+                <Button mode="contained" onPress={onSignInPress} style={styles.loginButton}>Login</Button>
+            </View>
+            <Button mode="text" onPress={() => router.replace('/register')} style={styles.loginButton} labelStyle={{ fontFamily: 'Montserrat-Bold' }}>Create an account</Button>
+        </SafeAreaView>
     )
 }
 
