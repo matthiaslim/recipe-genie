@@ -26,12 +26,12 @@ export default function Index() {
   const { signOut } = useClerk();
   const { user } = useUser();
 
-  const {isLoading,isAuthenticated} = useStoreUserEffect();
+  const { isLoading, isAuthenticated } = useStoreUserEffect();
 
-  const onSignOut = async ()=>{
-    await signOut()
+  const onSignOut = async () => {
+    await signOut();
     router.replace("/(auth)/login");
-  }
+  };
 
   return (
     <ScrollView>
@@ -46,65 +46,7 @@ export default function Index() {
           {user?.username}
         </Text>
       </SafeAreaView>
-      <View style={styles.container}>
-        <Link href="/generateRecipe" asChild>
-          <TouchableRipple
-            style={styles.inspoContainer}
-            onPress={() => console.log("Pressed")}
-          >
-            <View style={styles.inspoContent}>
-              <Icon size={24} source="magnify" color="#EF95A4" />
-              <Text style={styles.inspoTextColor}>
-                Find Recipe Inspirations
-              </Text>
-            </View>
-          </TouchableRipple>
-        </Link>
-        <Text variant="titleLarge" style={styles.bold}>
-          Recently viewed recipes
-        </Text>
-        <View style={styles.recentViewed}>
-          <TouchableRipple
-            style={styles.recipeCard}
-            onPress={() => console.log("Recipe 1")}
-          >
-            <View>
-              <Image
-                style={styles.recipeImg}
-                source={require("../../assets/images/ratatouille.jpg")}
-              />
-              <Text variant="titleSmall">Ratatouille</Text>
-              <Stars count={5} />
-            </View>
-          </TouchableRipple>
-          <TouchableRipple
-            style={styles.recipeCard}
-            onPress={() => console.log("Recipe 2")}
-          >
-            <View>
-              <Image
-                style={styles.recipeImg}
-                source={require("../../assets/images/foccacia.jpg")}
-              />
-              <Text variant="titleSmall">Foccacia</Text>
-              <Stars count={3} />
-            </View>
-          </TouchableRipple>
-          <TouchableRipple
-            style={styles.recipeCard}
-            onPress={() => console.log("Recipe 3")}
-          >
-            <View>
-              <Image
-                style={styles.recipeImg}
-                source={require("../../assets/images/carbonara.webp")}
-              />
-              <Text variant="titleSmall">Carbonara</Text>
-              <Stars count={2} />
-            </View>
-          </TouchableRipple>
-        </View>
-      </View>
+
       {isLoading ? (
         <Text>Loading...</Text>
       ) : !isAuthenticated ? (
@@ -112,9 +54,66 @@ export default function Index() {
           <Button>Login Page</Button>
         </Link>
       ) : (
-        
+        <View style={styles.container}>
+          <Link href="/generateRecipe" asChild>
+            <TouchableRipple
+              style={styles.inspoContainer}
+              onPress={() => console.log("Pressed")}
+            >
+              <View style={styles.inspoContent}>
+                <Icon size={24} source="magnify" color="#EF95A4" />
+                <Text style={styles.inspoTextColor}>
+                  Find Recipe Inspirations
+                </Text>
+              </View>
+            </TouchableRipple>
+          </Link>
+          <Text variant="titleLarge" style={styles.bold}>
+            Recently viewed recipes
+          </Text>
+          <View style={styles.recentViewed}>
+            <TouchableRipple
+              style={styles.recipeCard}
+              onPress={() => console.log("Recipe 1")}
+            >
+              <View>
+                <Image
+                  style={styles.recipeImg}
+                  source={require("../../assets/images/ratatouille.jpg")}
+                />
+                <Text variant="titleSmall">Ratatouille</Text>
+                <Stars count={5} />
+              </View>
+            </TouchableRipple>
+            <TouchableRipple
+              style={styles.recipeCard}
+              onPress={() => console.log("Recipe 2")}
+            >
+              <View>
+                <Image
+                  style={styles.recipeImg}
+                  source={require("../../assets/images/foccacia.jpg")}
+                />
+                <Text variant="titleSmall">Foccacia</Text>
+                <Stars count={3} />
+              </View>
+            </TouchableRipple>
+            <TouchableRipple
+              style={styles.recipeCard}
+              onPress={() => console.log("Recipe 3")}
+            >
+              <View>
+                <Image
+                  style={styles.recipeImg}
+                  source={require("../../assets/images/carbonara.webp")}
+                />
+                <Text variant="titleSmall">Carbonara</Text>
+                <Stars count={2} />
+              </View>
+            </TouchableRipple>
+          </View>
           <Button onPress={onSignOut}>Log Out</Button>
-        
+        </View>
       )}
     </ScrollView>
   );
