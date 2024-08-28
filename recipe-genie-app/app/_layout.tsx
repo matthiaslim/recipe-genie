@@ -73,7 +73,11 @@ export default function RootLayout() {
   };
 
   if (!fontsLoaded) {
-    return <View><Text>Loading...</Text></View>;
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
@@ -81,43 +85,30 @@ export default function RootLayout() {
       <ClerkLoaded>
         <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
           <PaperProvider theme={theme}>
-            <AuthStack />
+            <Stack initialRouteName={"/(auth)/login"}>
+              <Stack.Screen
+                name="(auth)"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="(tabs)"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="generateRecipe"
+                options={{
+                  title: "New Recipe",
+                  headerShown: false,
+                }}
+              />
+            </Stack>
           </PaperProvider>
         </ConvexProviderWithClerk>
       </ClerkLoaded>
     </ClerkProvider>
-  );
-}
-
-function AuthStack() {
-  const { isLoaded, isSignedIn } = useAuth();
-
-  if (!isLoaded) {
-    return <View><Text>Loading...</Text></View>;
-  }
-
-  return (
-    <Stack initialRouteName={isSignedIn ? "login" : "login"}>
-
-      <Stack.Screen
-        name="login"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="(tabs)"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="generateRecipe"
-        options={{
-          title: "New Recipe",
-          headerShown: false,
-        }}
-      />
-    </Stack>
   );
 }

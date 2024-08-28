@@ -5,7 +5,7 @@ import { Button, Text, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSignUp, } from "@clerk/clerk-expo";
 import { store } from "@/convex/users";
-import { api } from "../convex/_generated/api";
+import { api } from "../../convex/_generated/api";
 import { useMutation } from "convex/react";
 
 export default function Login() {
@@ -120,7 +120,7 @@ export default function Login() {
           </View>
           <Button
             mode="text"
-            onPress={() => router.replace("/login")}
+            onPress={() => router.replace("/(auth)/login")}
             style={styles.loginButton}
             labelStyle={{ fontFamily: "Montserrat-Bold" }}
           >

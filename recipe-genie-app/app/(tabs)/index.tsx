@@ -13,7 +13,6 @@ import {
   useTheme,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Authenticated, Unauthenticated, AuthLoading } from "convex/react";
 import { useClerk } from "@clerk/clerk-expo";
 import { router } from "expo-router";
 import { useUser } from "@clerk/clerk-expo";
@@ -30,7 +29,7 @@ export default function Index() {
 
   const onSignOut = async () => {
     await signOut();
-    router.replace("/login");
+    router.replace("/(auth)/login");
   };
 
   return (
