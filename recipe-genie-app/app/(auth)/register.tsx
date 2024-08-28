@@ -3,10 +3,11 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSignUp, } from "@clerk/clerk-expo";
+import { useSignUp } from "@clerk/clerk-expo";
 import { store } from "@/convex/users";
 import { api } from "../../convex/_generated/api";
 import { useMutation } from "convex/react";
+import { useNavigation } from "expo-router";
 
 export default function Login() {
   const { colors } = useTheme();
@@ -14,6 +15,7 @@ export default function Login() {
   const { isLoaded, signUp, setActive } = useSignUp();
 
   const storeUser = useMutation(api.users.store);
+  const navigation = useNavigation();
 
   const [username, setUsername] = React.useState("");
   const [emailAddress, setEmailAddress] = React.useState("");
@@ -69,8 +71,17 @@ export default function Login() {
     }
   };
 
+  const onPressBack = async () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      router.replace("/(auth)/login"); // Navigate to the home screen or any other screen
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+      <Button onPress={onPressBack} style={styles.backButton}>Back</Button>
       {!pendingVerification && (
         <>
           <View style={styles.form}>
@@ -130,12 +141,17 @@ export default function Login() {
       )}
       {pendingVerification && (
         <>
-          <TextInput
-            value={code}
-            placeholder="Code..."
-            onChangeText={(code) => setCode(code)}
-          />
-          <Button onPress={onPressVerify}> Verify Email </Button>
+          <View style={styles.verifyContainer}>
+            <Text style={[styles.bold]}>Check your email for a verification code</Text>
+            <TextInput
+              mode="outlined"
+              style={styles.verifyInput}
+              value={code}
+              placeholder="Code..."
+              onChangeText={(code) => setCode(code)}
+            />
+            <Button onPress={onPressVerify}> Verify Email </Button>
+          </View>
         </>
       )}
     </SafeAreaView>
@@ -149,7 +165,7 @@ const useStyles = (colors: any) =>
       justifyContent: "space-between",
       alignItems: "center",
       marginHorizontal: 15,
-      paddingVertical: 30,
+      paddingVertical: 25,
     },
     form: {
       marginTop: 75,
@@ -174,5 +190,22 @@ const useStyles = (colors: any) =>
       color: "red",
       marginTop: 20,
       textAlign: "center",
+    },
+    verifyContainer: {
+      alignItems: "center",
+      justifyContent: "center",
+      width: "80%",
+      height: "100%",
+    },
+    verifyInput: {
+      width: "100%", 
+      height: 40, 
+      margin: 12,
+      borderRadius: 5, 
+      padding: 10, 
+      marginTop: 20,
+    },
+    backButton: {
+      alignSelf: "flex-start",
     },
   });

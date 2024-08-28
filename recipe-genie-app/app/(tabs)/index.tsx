@@ -48,10 +48,6 @@ export default function Index() {
 
       {isLoading ? (
         <Text>Loading...</Text>
-      ) : !isAuthenticated ? (
-        <Link href="/(auth)/login" asChild>
-          <Button>Login Page</Button>
-        </Link>
       ) : (
         <View style={styles.container}>
           <Link href="/generateRecipe" asChild>
