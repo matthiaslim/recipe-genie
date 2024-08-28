@@ -79,13 +79,7 @@ export default function RootLayout() {
           <PaperProvider theme={theme}>
             <Stack>
               <Stack.Screen
-                name="login"
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="register"
+                name="(auth)"
                 options={{
                   headerShown: false,
                 }}
