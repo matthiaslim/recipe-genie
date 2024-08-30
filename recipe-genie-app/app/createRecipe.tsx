@@ -1,6 +1,6 @@
 import { Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, Chip, IconButton, Text, TextInput, useTheme } from "react-native-paper";
+import { Button, Chip, Divider, Icon, IconButton, Text, TextInput, useTheme } from "react-native-paper";
 import { router } from "expo-router";
 import { useState } from "react";
 
@@ -8,24 +8,51 @@ export default function CreateRecipe() {
     const { colors } = useTheme();
     const styles = useStyles(colors);
 
-    const ingredients = ["Celery", "Kale", "Tomato"];
+    const ingredients = [
+        { "_id": "91ufj1982394", "ingredientName": "Celery" },
+        { "_id": "91ufj1982294", "ingredientName": "Kale" },
+        { "_id": "28ghq1215392", "ingredientName": "Tomato" }
+    ]
 
     const [inputText, setInputText] = useState('');
 
-    const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+    const [selectedIngredients, setSelectedIngredients] = useState<{ _id: string, ingredientName: string, quantity: number }[]>([]);
     const [filteredIngredients, setFilteredIngredients] = useState(ingredients);
 
     const handleInputChange = (text: string) => {
         setInputText(text);
-        setFilteredIngredients(ingredients.filter(chip => chip.toLowerCase().includes(text.toLowerCase())));
+        setFilteredIngredients(ingredients.filter(ingredient =>
+            ingredient.ingredientName.toLowerCase().includes(text.toLowerCase())
+        ));
     };
 
-    const toggleSelection = (ingredient: string) => {
-        setSelectedIngredients(prevState =>
-            prevState.includes(ingredient)
-                ? prevState.filter(item => item !== ingredient)
-                : [...prevState, ingredient]
-        );
+    const toggleSelection = (ingredient: { _id: string, ingredientName: string }) => {
+        setSelectedIngredients(prevState => {
+            const existingIngredient = prevState.find(item => item.ingredientName === ingredient.ingredientName);
+            if (existingIngredient) {
+                return prevState.filter(item => item.ingredientName !== ingredient.ingredientName);
+            } else {
+                return [...prevState, { _id: ingredient._id, ingredientName: ingredient.ingredientName, quantity: 1 }];
+            }
+        });
+    };
+
+    const increaseQuantity = (index: number) => {
+        setSelectedIngredients(prevState => {
+            const newIngredients = [...prevState];
+            newIngredients[index].quantity += 1;
+            return newIngredients;
+        });
+    };
+
+    const decreaseQuantity = (index: number) => {
+        setSelectedIngredients(prevState => {
+            const newIngredients = [...prevState];
+            if (newIngredients[index].quantity > 1) {
+                newIngredients[index].quantity -= 1;
+            }
+            return newIngredients;
+        });
     };
 
     return (
@@ -51,18 +78,31 @@ export default function CreateRecipe() {
                             />
                             <ScrollView>
                                 <View style={styles.ingredientsInput}>
-                                    {filteredIngredients.map((ingredient, index) => (
+                                    {filteredIngredients.map(ingredient => (
                                         <Chip
-                                            key={index}
-                                            selected={selectedIngredients.includes(ingredient)}
+                                            key={ingredient._id}
+                                            selected={selectedIngredients.some(item => item.ingredientName === ingredient.ingredientName)}
                                             onPress={() => toggleSelection(ingredient)}
                                             style={styles.ingredientChip}
                                             selectedColor="#000000"
                                         >
-                                            {ingredient}
+                                            {ingredient.ingredientName}
                                         </Chip>
                                     ))}
                                 </View>
+                            </ScrollView>
+                            <Divider />
+                            <ScrollView>
+                                {selectedIngredients.map((ingredient, index) => (
+                                    <View style={styles.ingredientDetails}>
+                                        <Text variant="titleMedium">{ingredient.ingredientName}</Text>
+                                        <View style={styles.counter}>
+                                            <IconButton icon="minus" onPress={() => decreaseQuantity(index)} />
+                                            <Text variant="titleMedium">{ingredient.quantity}</Text>
+                                            <IconButton icon="plus" onPress={() => increaseQuantity(index)} />
+                                        </View>
+                                    </View>
+                                ))}
                             </ScrollView>
                         </View>
                         <TextInput
@@ -118,6 +158,16 @@ const useStyles = (colors: any) => StyleSheet.create({
         alignSelf: 'flex-start',
         marginHorizontal: 5,
         backgroundColor: colors.secondary,
+    },
+    ingredientDetails: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 5
+    },
+    counter: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     inputs: {
         marginTop: 20,
