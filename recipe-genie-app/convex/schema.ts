@@ -13,7 +13,7 @@ export default defineSchema({
     averageRating: v.optional(v.float64()),
     ratingCount: v.optional(v.number()),
     user: v.id("user"),
-  }),
+  }).index("by_user",["user"]),
   recipeIngredients: defineTable({
     recipeId: v.id("recipe"),
     ingredientId: v.id("ingredient"),

@@ -17,6 +17,8 @@ import { useClerk } from "@clerk/clerk-expo";
 import { router } from "expo-router";
 import { useUser } from "@clerk/clerk-expo";
 import { useStoreUserEffect } from "@/hooks/useStoreUserEffects";
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
 
 export default function Index() {
   const { colors } = useTheme();
@@ -26,6 +28,8 @@ export default function Index() {
   const { user } = useUser();
 
   const { isLoading, isAuthenticated } = useStoreUserEffect();
+  //const checkId = useQuery(api.users.checkId);
+  const allRecipeById = useQuery(api.recipe.readRecipe)
 
   const onSignOut = async () => {
     await signOut();
@@ -43,6 +47,11 @@ export default function Index() {
           style={{ color: "#FFFFFF", fontFamily: "Montserrat-Bold" }}
         >
           {user?.username}
+          {allRecipeById?.map((recipe) => (
+          <Text key={recipe._id} style={{ color: "#FFFFFF" }}>
+            {recipe.recipeName}: {recipe.description}
+          </Text>
+        ))}
         </Text>
       </SafeAreaView>
 
